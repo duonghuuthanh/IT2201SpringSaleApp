@@ -7,6 +7,7 @@ package com.dht.repositories.impl;
 import com.dht.pojo.Cart;
 import com.dht.pojo.OrderDetail;
 import com.dht.pojo.SaleOrder;
+import com.dht.repositories.ProductRepository;
 import com.dht.repositories.ReceiptRepository;
 import com.dht.repositories.UserRepository;
 import java.util.Date;
@@ -15,18 +16,22 @@ import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author admin
  */
 @Repository
+@Transactional
 public class ReceiptRepositoryImpl implements ReceiptRepository {
 
     @Autowired
     private LocalSessionFactoryBean factory;
     @Autowired
     private UserRepository userRepo;
+    @Autowired
+    private ProductRepository productRepo;
 
     @Override
     public void addReceipt(List<Cart> carts) {
@@ -41,12 +46,11 @@ public class ReceiptRepositoryImpl implements ReceiptRepository {
                 OrderDetail d = new OrderDetail();
                 d.setQuantity(x.getQuantity());
                 d.setUnitPrice(x.getPrice());
-                d.setProductId(new ProductRepositoryImpl().getProductById(x.getId()));
+                d.setProductId(this.productRepo.getProductById(x.getId()));
                 d.setOrderId(order);
 
                 s.persist(d);
             }
         }
-
     }
 }

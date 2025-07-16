@@ -1,7 +1,8 @@
 
 <!doctype html>
 
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
     <head>
         <title>Trang chủ</title>
     <th:context th:fragment="resources">
@@ -21,17 +22,19 @@
                         <li class="nav-item">
                             <a class="nav-link" th:href="@{/}">Trang chủ</a>
                         </li>
-                        <li class="nav-item" th:each="c: ${categories}">
+                        <li class="nav-item" th:each="c: ${categories}" sec:authorize="isAuthenticated()">
                             <a class="nav-link" href="#" th:text="${c.name}"></a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-danger" th:href="@{/stats}">Thống kê</a>
+                            <a class="nav-link text-danger" th:href="@{/stats}" sec:authorize="isAuthenticated()">Thống kê</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-danger" th:href="@{/logout}" sec:authorize="isAuthenticated()">Đăng xuất</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
-
         
         <footer th:fragment="footer">
             <div class="mt-4 p-5 bg-primary text-white rounded">

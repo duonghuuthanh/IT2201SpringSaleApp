@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api")
+@CrossOrigin
 public class ApiProductController {
     @Autowired
     private ProductService prodService;
@@ -37,7 +38,7 @@ public class ApiProductController {
     }
     
     @GetMapping("/products")
-    @CrossOrigin
+    
     public ResponseEntity<List<Product>> list(@RequestParam Map<String, String> params) {
         return new ResponseEntity<>(this.prodService.getProducts(params), HttpStatus.OK);
     }
