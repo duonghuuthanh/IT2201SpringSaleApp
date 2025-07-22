@@ -4,6 +4,7 @@
  */
 package com.dht.services;
 
+import com.dht.pojo.Comment;
 import com.dht.pojo.Product;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,8 @@ import java.util.Map;
  */
 public interface ProductService {
     List<Product> getProducts(Map<String, String> params);
-    void addOrUpdateProduct(Product p);
     Product getProductById(int id);
-    void deleteProduct(int id);
+    Product addOrUpdateProduct(Product p);
+    void deleleProduct(int id);
+    List<Comment> getComments(int productId);
 }

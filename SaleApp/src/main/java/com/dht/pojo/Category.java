@@ -5,8 +5,6 @@
 package com.dht.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import java.io.Serializable;
-import java.util.Set;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -18,6 +16,8 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.io.Serializable;
+import java.util.Set;
 
 /**
  *
@@ -105,11 +105,15 @@ public class Category implements Serializable {
             return false;
         }
         Category other = (Category) object;
-        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
     }
 
     @Override
     public String toString() {
         return "com.dht.pojo.Category[ id=" + id + " ]";
     }
+    
 }

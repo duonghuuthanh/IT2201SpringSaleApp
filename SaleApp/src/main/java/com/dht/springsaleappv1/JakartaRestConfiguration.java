@@ -1,4 +1,4 @@
-package com.dht.saleapp;
+package com.dht.springsaleappv1;
 
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;

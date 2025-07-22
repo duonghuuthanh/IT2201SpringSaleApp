@@ -5,14 +5,13 @@
 package com.dht.repositories;
 
 import com.dht.pojo.User;
-import java.util.Map;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
- * @author huu-thanhduong
+ * @author admin
  */
 public interface UserRepository {
     User getUserByUsername(String username);
     User addUser(User u);
+    boolean authenticate(String username, String password);
 }

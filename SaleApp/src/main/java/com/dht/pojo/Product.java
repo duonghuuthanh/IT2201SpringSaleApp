@@ -4,10 +4,7 @@
  */
 package com.dht.pojo;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -21,9 +18,10 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import jakarta.persistence.Transient;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Set;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -42,7 +40,6 @@ import org.springframework.web.multipart.MultipartFile;
     @NamedQuery(name = "Product.findByImage", query = "SELECT p FROM Product p WHERE p.image = :image"),
     @NamedQuery(name = "Product.findByCreatedDate", query = "SELECT p FROM Product p WHERE p.createdDate = :createdDate"),
     @NamedQuery(name = "Product.findByActive", query = "SELECT p FROM Product p WHERE p.active = :active")})
-@JsonIgnoreProperties(value = {"orderDetailSet", "commentSet", "prodTagSet", "categoryId", "file"})
 public class Product implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -63,20 +60,23 @@ public class Product implements Serializable {
     @Column(name = "image")
     private String image;
     @Column(name = "created_date")
-    @Temporal(TemporalType.TIMESTAMP)
+  
     private Date createdDate;
     @Column(name = "active")
     private Boolean active;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
+    @JsonIgnore
     private Set<ProdTag> prodTagSet;
     @JoinColumn(name = "category_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
+    @JsonIgnore
     private Category categoryId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
+    @JsonIgnore
     private Set<Comment> commentSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
+    @JsonIgnore
     private Set<OrderDetail> orderDetailSet;
-    
     @Transient
     private MultipartFile file;
 
@@ -202,7 +202,10 @@ public class Product implements Serializable {
             return false;
         }
         Product other = (Product) object;
-        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
     }
 
     @Override

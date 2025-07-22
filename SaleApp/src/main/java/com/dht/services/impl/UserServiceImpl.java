@@ -5,12 +5,16 @@
 package com.dht.services.impl;
 
 import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.dht.pojo.User;
 import com.dht.repositories.UserRepository;
 import com.dht.services.UserService;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,14 +23,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import com.cloudinary.utils.ObjectUtils;
-import java.io.IOException;
 
 /**
  *
- * @author huu-thanhduong
+ * @author admin
  */
-@Service
+@Service("userDetailsService")
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -39,6 +41,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByUsername(String username) {
         return this.userRepo.getUserByUsername(username);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User u = this.getUserByUsername(username);
+        if (u == null) {
+            throw new UsernameNotFoundException("Invalid username!");
+        }
+
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        authorities.add(new SimpleGrantedAuthority(u.getUserRole()));
+        
+        return new org.springframework.security.core.userdetails.User(
+                u.getUsername(), u.getPassword(), authorities);
     }
 
     @Override
@@ -57,7 +73,7 @@ public class UserServiceImpl implements UserService {
                 Map res = cloudinary.uploader().upload(avatar.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
                 u.setAvatar(res.get("secure_url").toString());
             } catch (IOException ex) {
-                System.err.println(ex.getMessage());
+                Logger.getLogger(ProductServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         
@@ -65,16 +81,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User u = this.getUserByUsername(username);
-        if (u == null) {
-            throw new UsernameNotFoundException("Invalid username!");
-        }
-
-        Set<GrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority(u.getUserRole()));
-        
-        return new org.springframework.security.core.userdetails.User(
-                u.getUsername(), u.getPassword(), authorities);
+    public boolean authenticate(String username, String password) {
+        return this.userRepo.authenticate(username, password);
     }
+
 }

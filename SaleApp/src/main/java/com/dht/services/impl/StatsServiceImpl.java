@@ -9,12 +9,14 @@ import com.dht.services.StatsService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author admin
  */
 @Service
+@Transactional
 public class StatsServiceImpl implements StatsService {
     @Autowired
     private StatsRepository statsRepo;
@@ -28,4 +30,5 @@ public class StatsServiceImpl implements StatsService {
     public List<Object[]> statsRevenueByTime(String time, int year) {
         return this.statsRepo.statsRevenueByTime(time, year);
     }
+    
 }

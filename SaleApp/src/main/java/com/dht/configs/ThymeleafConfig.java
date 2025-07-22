@@ -17,7 +17,7 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
  * @author admin
  */
 @Configuration
-public class ThymeleafConfigs {
+public class ThymeleafConfig {
 
     @Bean
     public ClassLoaderTemplateResolver templateResolver() {
@@ -34,6 +34,7 @@ public class ThymeleafConfigs {
         SpringTemplateEngine templateEngine = new SpringTemplateEngine();
         templateEngine.setTemplateResolver(templateResolver());
         templateEngine.addDialect(new SpringSecurityDialect());
+        
         return templateEngine;
     }
 

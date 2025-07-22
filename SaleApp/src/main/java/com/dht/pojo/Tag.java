@@ -4,8 +4,6 @@
  */
 package com.dht.pojo;
 
-import java.io.Serializable;
-import java.util.Set;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -17,6 +15,8 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.io.Serializable;
+import java.util.Set;
 
 /**
  *
@@ -103,7 +103,10 @@ public class Tag implements Serializable {
             return false;
         }
         Tag other = (Tag) object;
-        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
     }
 
     @Override

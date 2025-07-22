@@ -4,6 +4,7 @@
  */
 package com.dht.repositories.impl;
 
+
 import com.dht.pojo.Cart;
 import com.dht.pojo.OrderDetail;
 import com.dht.pojo.SaleOrder;
@@ -15,6 +16,7 @@ import java.util.List;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,26 +33,25 @@ public class ReceiptRepositoryImpl implements ReceiptRepository {
     @Autowired
     private UserRepository userRepo;
     @Autowired
-    private ProductRepository productRepo;
+    private ProductRepository prodRepo;
 
     @Override
     public void addReceipt(List<Cart> carts) {
-        if (carts != null) {
-            Session s = this.factory.getObject().getCurrentSession();
-            SaleOrder order = new SaleOrder();
-            order.setUserId(this.userRepo.getUserByUsername("dhthanh"));
-            order.setCreatedDate(new Date());
-            s.persist(order);
+        Session s = this.factory.getObject().getCurrentSession();
+        SaleOrder r = new SaleOrder();
+        r.setCreatedDate(new Date());
+        r.setUserId(this.userRepo.getUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName())); // update current user
+        s.persist(r);
 
-            for (var x : carts) {
-                OrderDetail d = new OrderDetail();
-                d.setQuantity(x.getQuantity());
-                d.setUnitPrice(x.getPrice());
-                d.setProductId(this.productRepo.getProductById(x.getId()));
-                d.setOrderId(order);
+        for (var c : carts) {
+            OrderDetail d = new OrderDetail();
+            d.setQuantity(c.getQuantity());
+            d.setUnitPrice(c.getPrice());
+            d.setOrderId(r);
+            d.setProductId(this.prodRepo.getProductById(c.getId()));
 
-                s.persist(d);
-            }
+            s.persist(d);
         }
     }
+
 }

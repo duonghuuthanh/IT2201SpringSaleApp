@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  *
- * @author huu-thanhduong
+ * @author admin
  */
 public interface ReceiptService {
     void addReceipt(List<Cart> carts);

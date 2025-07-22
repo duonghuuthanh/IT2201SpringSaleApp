@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 
 /**
  *
- * @author huu-thanhduong
+ * @author admin
  */
 @Service
-public class ReceiptServiceImpl implements ReceiptService {
+public class ReceiptServiceImpl implements ReceiptService{
     @Autowired
     private ReceiptRepository receiptRepo;
 

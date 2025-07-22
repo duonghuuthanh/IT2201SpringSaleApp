@@ -24,20 +24,22 @@ public class ProductController {
     private ProductService prodService;
     
     @GetMapping("/products")
-    public String listProducts(Model model) {
+    public String addView(Model model) {
         model.addAttribute("product", new Product());
         return "products";
     }
     
-    @PostMapping("/products")
-    public String addProduct(@ModelAttribute(value = "product") Product p) {
+    @PostMapping("/add")
+    public String add(@ModelAttribute(value = "product") Product p) {
         this.prodService.addOrUpdateProduct(p);
+        
         return "redirect:/";
     }
     
     @GetMapping("/products/{productId}")
-    public String updateProduct(Model model, @PathVariable(value = "productId") int id ) {
+    public String updateView(Model model, @PathVariable(value = "productId") int id) {
         model.addAttribute("product", this.prodService.getProductById(id));
+        
         return "products";
     }
 }

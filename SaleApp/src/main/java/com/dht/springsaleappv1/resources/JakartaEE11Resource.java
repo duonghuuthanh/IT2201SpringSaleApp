@@ -1,4 +1,4 @@
-package com.dht.saleapp.resources;
+package com.dht.springsaleappv1.resources;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;

@@ -6,6 +6,7 @@ package com.dht.services.impl;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.dht.pojo.Comment;
 import com.dht.pojo.Product;
 import com.dht.repositories.ProductRepository;
 import com.dht.services.ProductService;
@@ -25,17 +26,22 @@ import org.springframework.stereotype.Service;
 public class ProductServiceImpl implements ProductService {
 
     @Autowired
-    private ProductRepository productRepo;
+    private ProductRepository prodRepo;
     @Autowired
     private Cloudinary cloudinary;
 
     @Override
     public List<Product> getProducts(Map<String, String> params) {
-        return this.productRepo.getProducts(params);
+        return this.prodRepo.getProducts(params);
     }
 
     @Override
-    public void addOrUpdateProduct(Product p) {
+    public Product getProductById(int id) {
+        return this.prodRepo.getProductById(id);
+    }
+
+    @Override
+    public Product addOrUpdateProduct(Product p) {
         if (!p.getFile().isEmpty()) {
             try {
                 Map res = cloudinary.uploader().upload(p.getFile().getBytes(),
@@ -44,19 +50,19 @@ public class ProductServiceImpl implements ProductService {
             } catch (IOException ex) {
                 Logger.getLogger(ProductServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } 
+        }
 
-        this.productRepo.addOrUpdateProduct(p);
+        return this.prodRepo.addOrUpdateProduct(p);
     }
 
     @Override
-    public Product getProductById(int id) {
-        return this.productRepo.getProductById(id);
+    public void deleleProduct(int id) {
+        this.prodRepo.deleleProduct(id);
     }
 
     @Override
-    public void deleteProduct(int id) {
-         this.productRepo.deleteProduct(id);
+    public List<Comment> getComments(int productId) {
+        return this.prodRepo.getComments(productId);
     }
 
 }

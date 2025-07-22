@@ -4,8 +4,7 @@
  */
 package com.dht.pojo;
 
-import java.io.Serializable;
-import java.util.Set;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -17,6 +16,8 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.io.Serializable;
+import java.util.Set;
 
 /**
  *
@@ -61,17 +62,21 @@ public class User implements Serializable {
     private String username;
     @Basic(optional = false)
     @Column(name = "password")
+    
     private String password;
     @Column(name = "active")
     private Boolean active;
     @Basic(optional = false)
     @Column(name = "user_role")
+    @JsonIgnore
     private String userRole;
     @Column(name = "avatar")
     private String avatar;
     @OneToMany(mappedBy = "userId")
+    @JsonIgnore
     private Set<SaleOrder> saleOrderSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    @JsonIgnore
     private Set<Comment> commentSet;
 
     public User() {
@@ -202,7 +207,10 @@ public class User implements Serializable {
             return false;
         }
         User other = (User) object;
-        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
     }
 
     @Override

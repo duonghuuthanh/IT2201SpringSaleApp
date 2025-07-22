@@ -4,7 +4,6 @@
  */
 package com.dht.pojo;
 
-import java.io.Serializable;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,6 +15,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
+import java.io.Serializable;
 
 /**
  *
@@ -86,7 +86,10 @@ public class ProdTag implements Serializable {
             return false;
         }
         ProdTag other = (ProdTag) object;
-        return !((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id)));
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
     }
 
     @Override

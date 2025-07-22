@@ -4,6 +4,7 @@
  */
 package com.dht.controllers;
 
+import com.dht.pojo.Comment;
 import com.dht.pojo.Product;
 import com.dht.services.ProductService;
 import java.util.List;
@@ -33,18 +34,22 @@ public class ApiProductController {
     
     @DeleteMapping("/products/{productId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteProduct(@PathVariable(value = "productId") int id) {
-        this.prodService.deleteProduct(id);
+    public void destroy(@PathVariable(value = "productId") int id) {
+        this.prodService.deleleProduct(id);
     }
     
     @GetMapping("/products")
-    
     public ResponseEntity<List<Product>> list(@RequestParam Map<String, String> params) {
         return new ResponseEntity<>(this.prodService.getProducts(params), HttpStatus.OK);
-    }
+    } 
     
     @GetMapping("/products/{productId}")
     public ResponseEntity<Product> retrieve(@PathVariable(value = "productId") int id) {
         return new ResponseEntity<>(this.prodService.getProductById(id), HttpStatus.OK);
+    }
+    
+    @GetMapping("/products/{productId}/comments")
+    public ResponseEntity<List<Comment>> getComments(@PathVariable(value = "productId") int id) {
+        return new ResponseEntity<>(this.prodService.getComments(id), HttpStatus.OK);                
     }
 }
