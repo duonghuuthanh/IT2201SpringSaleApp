@@ -4,6 +4,7 @@ import Apis, { endpoints } from "../configs/Apis";
 import { useSearchParams } from "react-router-dom";
 import cookie from 'react-cookies'
 import { MyCartContext } from "../configs/Contexts";
+import MySpinner from "./layout/MySpinner";
 
 const Home = () => {
     const [products, setProducts] = useState([]);
@@ -112,7 +113,7 @@ const Home = () => {
                 </Col>)}
             </Row>
 
-            {loading && <Spinner animation="grow" variant="primary" />}
+            {loading && <MySpinner />}
 
             {page > 0 && <div className="mt-2 mb-2 text-center">
                 <Button variant="primary" onClick={loadMore}>Xem thêm...</Button>

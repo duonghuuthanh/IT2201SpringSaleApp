@@ -1,12 +1,13 @@
 import { useContext, useEffect, useState } from "react";
-import { Alert, Badge, Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { Alert, Badge, Button, Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import Apis, { endpoints } from "../../configs/Apis";
 import { Link } from "react-router-dom";
-import { MyCartContext } from "../../configs/Contexts";
+import { MyCartContext, MyUserContext } from "../../configs/Contexts";
 
 const Header = () => {
     const [categories, setCategories] = useState([]);
     const [cartCounter, ] = useContext(MyCartContext);
+    const [user, dispatch] = useContext(MyUserContext);
 
     const loadCates = async () => {
         let res = await Apis.get(endpoints['categories']);
@@ -30,8 +31,19 @@ const Header = () => {
                     </NavDropdown>
 
                     <Link to="/cart" className="nav-link text-success">Giỏ hàng <Badge bg="danger">{cartCounter}</Badge></Link>
-                    <Link to="/register" className="nav-link text-info">Đăng ký</Link>
-                    <Link to="/login" className="nav-link text-info">Đăng nhập</Link>
+
+                    {user === null?<>
+                        <Link to="/register" className="nav-link text-info">Đăng ký</Link>
+                        <Link to="/login" className="nav-link text-info">Đăng nhập</Link>
+                    </>:<>
+
+                        <Link to="/" className="nav-link text-info">
+                            <img src={user.avatar} width={30} className="rounded" />
+                            Chào {user.username}!
+                        </Link>
+                        <Button variant="danger" onClick={() => dispatch({"type": "logout"})}>Đăng xuất</Button>
+                    </>}
+                    
                 </Nav>
                 </Navbar.Collapse>
             </Container>

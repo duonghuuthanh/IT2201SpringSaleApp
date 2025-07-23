@@ -1,9 +1,32 @@
-import { useState } from "react";
+import { use, useContext, useState } from "react";
 import { Alert, Button, Table } from "react-bootstrap";
 import cookie from 'react-cookies'
+import { MyUserContext } from "../configs/Contexts";
+import { Link } from "react-router-dom";
+import { authApis, endpoints } from "../configs/Apis";
+import MySpinner from "./layout/MySpinner";
 
 const Cart = () => {
     const [cart, setCart] = useState(cookie.load('cart') || null);
+    const [user, ] = useContext(MyUserContext);
+    const [loading, setLoading] = useState(false);
+
+    const pay = async () => {
+        
+        try {
+            setLoading(true);
+            
+            let res = await authApis().post(endpoints['pay'], Object.values(cart));
+            if (res.status === 200) {
+                cookie.remove('cart');
+                setCart(null);
+            }
+        } catch (ex) {
+            console.error(ex);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     return (
         <>
@@ -33,10 +56,11 @@ const Cart = () => {
                         
                     </tbody>
                 </Table>
-
-                <div className="mt-1 mb-1">
-                    <Button variant="success">Thanh toán</Button>
-                </div>
+            
+                {user === null?<Alert>Vui lòng <Link to="/login?next=/cart">đăng nhập</Link> để thanh toán!</Alert>:<div className="mt-1 mb-1">
+                    {loading?<MySpinner />: <Button variant="success" onClick={pay}>Thanh toán</Button>}
+                </div>}
+                
                 
             </>}
             
