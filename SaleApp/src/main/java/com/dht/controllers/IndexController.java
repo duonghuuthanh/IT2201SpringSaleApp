@@ -4,7 +4,6 @@
  */
 package com.dht.controllers;
 
-
 import com.dht.services.CategoryService;
 import com.dht.services.ProductService;
 import java.util.Map;
@@ -23,19 +22,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @ControllerAdvice
 public class IndexController {
+
     @Autowired
     private CategoryService cateService;
     @Autowired
     private ProductService prodService;
-    
+
     @ModelAttribute
     public void commonResponse(Model model) {
         model.addAttribute("categories", this.cateService.getCates());
     }
-    
+
     @RequestMapping("/")
     public String index(Model model, @RequestParam Map<String, String> params) {
-        
+
         model.addAttribute("products", this.prodService.getProducts(params));
         return "index";
     }

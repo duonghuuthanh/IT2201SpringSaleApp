@@ -16,13 +16,14 @@ import org.springframework.web.bind.annotation.GetMapping;
  */
 @Controller
 public class StatsController {
+
     @Autowired
     private StatsService statsService;
-    
+
     @GetMapping("/stats")
     public String stats(Model model) {
         model.addAttribute("productRevenues", statsService.statsRevenueByProduct());
-        
+
         return "stats";
     }
 }

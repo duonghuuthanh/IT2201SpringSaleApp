@@ -24,9 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 @CrossOrigin
 public class ApiReceiptController {
+
     @Autowired
     private ReceiptService receiptService;
-    
+
     @PostMapping("/secure/cart")
     @ResponseStatus(HttpStatus.OK)
     public void addReceipt(@RequestBody List<Cart> carts) {

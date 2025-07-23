@@ -35,10 +35,11 @@ public class ApiUserController {
     @Autowired
     private UserService userDetailsService;
 
-    @PostMapping(path = "/users", 
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE, 
+    @PostMapping(path = "/users",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> create(@RequestParam Map<String, String> params, @RequestParam(value = "avatar") MultipartFile avatar) {
+    public ResponseEntity<User> create(@RequestParam Map<String, String> params,
+            @RequestParam(value = "avatar") MultipartFile avatar) {
         return new ResponseEntity<>(this.userDetailsService.addUser(params, avatar), HttpStatus.CREATED);
     }
 

@@ -1,9 +1,12 @@
-import { useEffect, useState } from "react";
-import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import { useContext, useEffect, useState } from "react";
+import { Alert, Badge, Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import Apis, { endpoints } from "../../configs/Apis";
+import { Link } from "react-router-dom";
+import { MyCartContext } from "../../configs/Contexts";
 
 const Header = () => {
     const [categories, setCategories] = useState([]);
+    const [cartCounter, ] = useContext(MyCartContext);
 
     const loadCates = async () => {
         let res = await Apis.get(endpoints['categories']);
@@ -15,25 +18,24 @@ const Header = () => {
     }, []);
 
     return (
-        <>
-            <Navbar expand="lg" className="bg-body-tertiary">
+        <Navbar expand="lg" className="bg-body-tertiary">
             <Container>
-                <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+                <Navbar.Brand href="#home">E-commerce Website</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="me-auto">
-                    <Nav.Link href="#home">Home</Nav.Link>
-                    <Nav.Link href="#link">Link</Nav.Link>
+                    <Link to="/" className="nav-link">Trang chủ</Link>
                     <NavDropdown title="Danh mục" id="basic-nav-dropdown">
-                        {categories.map(c => <NavDropdown.Item key={c.id} href="#action/3.1">{c.name}</NavDropdown.Item>)}
-                        
-                    
+                        {categories.map(c => <Link key={c.id} to={`/?cateId=${c.id}`} className="dropdown-item">{c.name}</Link>)}
                     </NavDropdown>
+
+                    <Link to="/cart" className="nav-link text-success">Giỏ hàng <Badge bg="danger">{cartCounter}</Badge></Link>
+                    <Link to="/register" className="nav-link text-info">Đăng ký</Link>
+                    <Link to="/login" className="nav-link text-info">Đăng nhập</Link>
                 </Nav>
                 </Navbar.Collapse>
             </Container>
-            </Navbar>
-        </>
+        </Navbar>
     );
 }
 

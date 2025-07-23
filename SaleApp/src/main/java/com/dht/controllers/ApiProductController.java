@@ -29,27 +29,28 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 @CrossOrigin
 public class ApiProductController {
+
     @Autowired
     private ProductService prodService;
-    
+
     @DeleteMapping("/products/{productId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void destroy(@PathVariable(value = "productId") int id) {
         this.prodService.deleleProduct(id);
     }
-    
+
     @GetMapping("/products")
     public ResponseEntity<List<Product>> list(@RequestParam Map<String, String> params) {
         return new ResponseEntity<>(this.prodService.getProducts(params), HttpStatus.OK);
-    } 
-    
+    }
+
     @GetMapping("/products/{productId}")
     public ResponseEntity<Product> retrieve(@PathVariable(value = "productId") int id) {
         return new ResponseEntity<>(this.prodService.getProductById(id), HttpStatus.OK);
     }
-    
+
     @GetMapping("/products/{productId}/comments")
     public ResponseEntity<List<Comment>> getComments(@PathVariable(value = "productId") int id) {
-        return new ResponseEntity<>(this.prodService.getComments(id), HttpStatus.OK);                
+        return new ResponseEntity<>(this.prodService.getComments(id), HttpStatus.OK);
     }
 }
